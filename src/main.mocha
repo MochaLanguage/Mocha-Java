@@ -1,2 +1,2 @@
-out "Hello world!"
+out "Hello \/ world!" /test hello/
 end

@@ -1,24 +1,25 @@
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+
 public class Mocha {
     public static void main(String[] args) throws Exception {
-        File mochafile = new File("");
-        Scanner myReader = new Scanner(mochafile);
-        while (myReader.hasNextLine()) {
-            String data = myReader.nextLine();
-        }
-        myReader.close();
+        String result = readFile("src\\main.mocha");
+        System.out.println(result);
     }
-    public String readFile(File file, Charset charset) throws IOException {
-        return new String(Files.readAllBytes(file.toPath()), charset);
+
+    public static String readFile(String path) throws IOException {
+        String text = Files.readString(java.nio.file.Paths.get(path), java.nio.charset.StandardCharsets.UTF_8);
+        text = text.replaceAll("\\/", "\u0000");
+        return text;
+        // text = text.replaceAll("\\\\/", "/");
+        // text = text.replaceAll("(\".*?\")", m.group(0).replace(" ", "\u0000"));
+        // String[] result = java.util.Arrays.stream(text.split("\n"))
+        //     .map(line -> java.util.Arrays.stream(line.strip().split("\\s+"))
+        //         .map(i -> i.replace("\\n", "\n").replace("\u0000", " "))
+        //         .toArray(String[]::new))
+        //     .filter(i -> i.length > 0 && !i[0].isEmpty())
+        //     .map(java.util.Arrays::toString)
+        //     .toArray(String[]::new);
+        // return result;
     }
 }
