@@ -1,2 +1,6 @@
 out "Hello \/ world!" /test hello/
+/hi there/
+out "test!" /hello
+world?/
+.out "wooooa"
 end
