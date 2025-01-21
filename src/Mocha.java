@@ -12,19 +12,23 @@ public class Mocha {
 
     public static void main(String[] args) throws Exception {
         String[][] lines = readFile("src\\main.mocha");
-
         for (String[] line : lines) {
             if (line[0].startsWith(".")) {
                 line[0] = line[0].substring(1);
-                runLine(line);
+                runLine(line,lines);
             }
         }
 
+        linenum = 0;
         while (true) {
-            runLine(lines[linenum]);
+            runLine(lines[linenum],lines);
         }
     }
 
+    // public static Object getVar() {
+    //     return newObject;
+    // }
+    
     public static String[][] readFile(String path) throws IOException {
         String text = Files.readString(java.nio.file.Paths.get(path), java.nio.charset.StandardCharsets.UTF_8);
         //null character my beloved <3
@@ -48,39 +52,77 @@ public class Mocha {
             .filter(i -> i.length > 0 && !i[0].isEmpty())
             .collect(Collectors.toList());
         
-        return processedText.toArray(new String[0][]);
+        return processedText.toArray(String[][]::new);
     }
 
-    public static void runLine(String[] line)
+    public static void runLine(String[] line, String[][] lines)
     {
         switch (line[0]) {
-            case "out":
+        case "out" -> {
+            if (vars.containsKey(line[1])) {
+                System.out.println((String) vars.get(line[1]));
+            } else {
+                System.out.println(line[1].substring(1, line[1].length() - 1));
+            }
+            linenum++;
+        }
+        case "end" -> {
+            System.exit(0);
+        }
+        case "jmp" -> {
+            if (vars.containsKey(line[1])) {
+                linenum = Integer.parseInt(vars.get(line[1]).toString()) - 1;
+            } else {
+                linenum = Integer.parseInt(line[1]) - 1;
+            }
+        }
+        case "try" -> {
+            if ((Boolean) vars.get(line[2])){
                 if (vars.containsKey(line[1])) {
-                    System.out.println(vars.get(line[1]));
+                    linenum = Integer.parseInt(vars.get(line[1]).toString()) - 1;
                 } else {
-                    System.out.println(line[1].substring(1,line[1].length()-1));
+                    linenum = Integer.parseInt(line[1]) - 1;
                 }
-                linenum++;
-                break;
-            case "end":
-                System.exit(0);
-                break;
-            case "jmp":
+            }
+        }
+        case "slp" -> {
+            try {
                 if (vars.containsKey(line[1])) {
-                    linenum = Integer.parseInt(vars.get(line[1]).toString())-1;
-                } else {
-                    linenum = Integer.parseInt(line[1])-1;
+                    Thread.sleep((int) vars.get(line[2])); 
                 }
-                break;
-            case "try":
-                if (vars.get(line[2])){
-                    if (vars.containsKey(line[1])) {
-                        linenum = Integer.parseInt(vars.get(line[1]).toString())-1;
+                else {
+                    Thread.sleep(Integer.parseInt(line[1]));
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        case "err" -> {
+            try {
+                runLine(lines[linenum+1],lines);
+            } catch (Exception e) {
+                if (vars.containsKey(line[1])) {
+                    linenum = Integer.parseInt(vars.get(line[1]).toString()) - 1;
+                } else {
+                    linenum = Integer.parseInt(line[1]) - 1;
+                }
+            }
+        }
+        case "var" -> {
+            switch (line[1]) {
+            case "int" -> {
+                switch (line[3]) {
+                case "set" -> {
+                    if (vars.containsKey(line[3])) {
+                        vars.put(line[2], vars.get(line[4]));
                     } else {
-                        linenum = Integer.parseInt(line[1])-1;
+                        vars.put(line[2], line[4]);
                     }
                 }
-                break;
+                }
+            }
+            }
+        }
         }
     }
 }
