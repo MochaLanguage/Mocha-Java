@@ -1,6 +1,9 @@
-out "Hello \/ world!"
-out "test"
+out "Hello \/ world!\n"
+var inp name "What is your name?\n> "
+out "hi there "
+out name
+out "\ntest"
 out "test!" /hello
 world?/
-.out "wooooa"
+.out "\nwooooa"
 end
