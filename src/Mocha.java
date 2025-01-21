@@ -5,9 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.Random;
 
 public class Mocha {
     public static Map<String, Object> vars = new HashMap<>();
+    public static Map<String, Integer> types = new HashMap<>();
+    //bool, int, double, string, array
     public static int linenum = 0;
 
     public static void main(String[] args) throws Exception {
@@ -115,8 +118,77 @@ public class Mocha {
                 case "set" -> {
                     if (vars.containsKey(line[3])) {
                         vars.put(line[2], vars.get(line[4]));
+                        types.put(line[2],1);
                     } else {
                         vars.put(line[2], line[4]);
+                        types.put(line[2],1);
+                    }
+                }
+                case "add" -> {
+                    if (vars.containsKey(line[4])) {
+                        vars.put(line[2], (int) vars.get(line[4]) + (int) vars.get(line[2]));
+                        types.put(line[2],1);
+                    } else {
+                        vars.put(line[2], Integer.parseInt(line[4]) + (int) vars.get(line[2]));
+                        types.put(line[2],1);
+                    }
+                }
+                case "sub" -> {
+                    if (vars.containsKey(line[4])) {
+                        vars.put(line[2], (int) vars.get(line[4]) - (int) vars.get(line[2]));
+                        types.put(line[2],1);
+                    } else {
+                        vars.put(line[2], Integer.parseInt(line[4]) - (int) vars.get(line[2]));
+                        types.put(line[2],1);
+                    }
+                }
+                case "mlt" -> {
+                    if (vars.containsKey(line[4])) {
+                        vars.put(line[2], (int) vars.get(line[4]) * (int) vars.get(line[2]));
+                        types.put(line[2],1);
+                    } else {
+                        vars.put(line[2], Integer.parseInt(line[4]) * (int) vars.get(line[2]));
+                        types.put(line[2],1);
+                    }
+                }
+                case "div" -> {
+                    if (vars.containsKey(line[4])) {
+                        vars.put(line[2], (int) vars.get(line[4]) / (int) vars.get(line[2]));
+                        types.put(line[2],1);
+                    } else {
+                        vars.put(line[2], Integer.parseInt(line[4]) / (int) vars.get(line[2]));
+                        types.put(line[2],1);
+                    }
+                }
+                case "mod" -> {
+                    if (vars.containsKey(line[4])) {
+                        vars.put(line[2], (int) vars.get(line[4]) % (int) vars.get(line[2]));
+                        types.put(line[2],1);
+                    } else {
+                        vars.put(line[2], Integer.parseInt(line[4]) % (int) vars.get(line[2]));
+                        types.put(line[2],1);
+                    }
+                }
+                case "pow" -> {
+                    if (vars.containsKey(line[4])) {
+                        vars.put(line[2], Math.pow((int) vars.get(line[4]), (int) vars.get(line[2])));
+                        types.put(line[2],1);
+                    } else {
+                        vars.put(line[2], Math.pow(Integer.parseInt(line[4]), (int) vars.get(line[2])));
+                        types.put(line[2],1);
+                    }
+                }
+                case "rng" -> {
+                    Random rng = new Random();
+                    //var int test rng 1 2
+                    if (vars.containsKey(line[4])) {
+                        if (vars.containsKey(line[5])) {
+                            vars.put(line[2],new rng.nextInt((int) vars.get(line[5]) - (int) vars.get(line[4])) + (int) vars.get(line[4]));
+                        } else {
+
+                        }
+                    } else {
+
                     }
                 }
                 }

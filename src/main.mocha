@@ -1,5 +1,5 @@
-out "Hello \/ world!" /test hello/
-/hi there/
+out "Hello \/ world!"
+out "test"
 out "test!" /hello
 world?/
 .out "wooooa"
