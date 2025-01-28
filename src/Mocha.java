@@ -24,6 +24,7 @@ public class Mocha {
 
         linenum = 0;
         while (true) {
+            // System.out.println(linenum);
             runLine(lines[linenum],lines);
         }
     }
@@ -33,22 +34,22 @@ public class Mocha {
     // }
     
     public static String[][] readFile(String path) throws IOException {
-        String text = Files.readString(java.nio.file.Paths.get(path), java.nio.charset.StandardCharsets.UTF_8);
+        String content = Files.readString(java.nio.file.Paths.get(path), java.nio.charset.StandardCharsets.UTF_8);
         //null character my beloved <3
-        text = text.replaceAll("\\\\/", "\u0000");
-        text = text.replaceAll("/(?s).*?/", "");
-        text = text.replaceAll("\u0000","/");
+        content = content.replaceAll("\\\\/", "\u0000");
+        content = content.replaceAll("/(?s).*?/", "");
+        content = content.replaceAll("\u0000","/");
 
         java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("(\".*?\")");
-        java.util.regex.Matcher matcher = pattern.matcher(text);
+        java.util.regex.Matcher matcher = pattern.matcher(content);
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
             matcher.appendReplacement(sb, matcher.group(0).replace(" ", "\u0000"));
         }
         matcher.appendTail(sb);
-        text = sb.toString();
+        content = sb.toString();
 
-        List<String[]> processedText = Arrays.stream(text.split("\n"))
+        List<String[]> processedText = Arrays.stream(content.split("\n"))
             .map(line -> Arrays.stream(line.strip().split("\\s+"))
                 .map(i -> i.replace("\\n", "\n").replace("\u0000", " "))
                 .toArray(String[]::new))
@@ -399,8 +400,12 @@ public class Mocha {
                 vars.put(line[2], System.console().readLine());
                 types.put(line[2],3);
             }
+            
         }
         linenum++;
+        }
+        default -> {
+            linenum++;
         }
     }
 }

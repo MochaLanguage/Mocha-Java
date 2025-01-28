@@ -1,9 +1,10 @@
 out "Hello \/ world!\n"
 var inp name "What is your name?\n> "
+
 out "hi there "
-out name
-out "\ntest"
-out "test!" /hello
+out name /cool test here\\/
+out "\nhere's a quote: \"insert quote here\" - anonymous"
+out "test! \\ test" /hello
 world?/
 .out "\nwooooa"
 end
