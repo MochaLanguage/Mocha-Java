@@ -1,10 +1,6 @@
-out "Hello \/ world!\n"
-var inp name "What is your name?\n> "
+out "aaa \# sbbb!\n"
+var inp name "ccc\n> "
 
 out "hi there "
-out name /cool test here\\/
-out "\nhere's a quote: \"insert quote here\" - anonymous"
-out "test! \\ test" /hello
-world?/
-.out "\nwooooa"
+out name
 end

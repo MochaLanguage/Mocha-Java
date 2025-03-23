@@ -28,21 +28,14 @@ public class Mocha {
             runLine(lines[linenum],lines);
         }
     }
-
-    // public static Object getVar() {
-    //     return newObject;
-    // }
     
     public static String[][] readFile(String path) throws IOException {
         String content = Files.readString(java.nio.file.Paths.get(path), java.nio.charset.StandardCharsets.UTF_8);
-        //null character my beloved <3
-        content = content.replaceAll("\\\\/", "\u0000");
-        content = content.replaceAll("/(?s).*?/", "");
-        content = content.replaceAll("\u0000","/");
 
         java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("(\".*?\")");
         java.util.regex.Matcher matcher = pattern.matcher(content);
         StringBuffer sb = new StringBuffer();
+
         while (matcher.find()) {
             matcher.appendReplacement(sb, matcher.group(0).replace(" ", "\u0000"));
         }
@@ -51,7 +44,7 @@ public class Mocha {
 
         List<String[]> processedText = Arrays.stream(content.split("\n"))
             .map(line -> Arrays.stream(line.strip().split("\\s+"))
-                .map(i -> i.replace("\\n", "\n").replace("\u0000", " "))
+                .map(i -> i.replace("[^\\]\\n", "\n").replace("\u0000", " "))
                 .toArray(String[]::new))
             .filter(i -> i.length > 0 && !i[0].isEmpty())
             .collect(Collectors.toList());
