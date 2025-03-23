@@ -1,6 +1,6 @@
-out "aaa \# sbbb!\n"
-var inp name "ccc\n> "
+out "hello there!\n"
+var inp name "what's your name?\n> "
 
-out "hi there "
+out "hi "
 out name
 end

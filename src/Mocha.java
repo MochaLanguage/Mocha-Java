@@ -1,13 +1,9 @@
 import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.stream.Collectors;
 
-public class Mocha {
+public class Mocha extends Parser {
     public static Map<String, Object> vars = new HashMap<>();
     public static Map<String, Integer> types = new HashMap<>();
     //bool, int, double, string, array
@@ -30,26 +26,7 @@ public class Mocha {
     }
     
     public static String[][] readFile(String path) throws IOException {
-        String content = Files.readString(java.nio.file.Paths.get(path), java.nio.charset.StandardCharsets.UTF_8);
-
-        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("(\".*?\")");
-        java.util.regex.Matcher matcher = pattern.matcher(content);
-        StringBuffer sb = new StringBuffer();
-
-        while (matcher.find()) {
-            matcher.appendReplacement(sb, matcher.group(0).replace(" ", "\u0000"));
-        }
-        matcher.appendTail(sb);
-        content = sb.toString();
-
-        List<String[]> processedText = Arrays.stream(content.split("\n"))
-            .map(line -> Arrays.stream(line.strip().split("\\s+"))
-                .map(i -> i.replace("[^\\]\\n", "\n").replace("\u0000", " "))
-                .toArray(String[]::new))
-            .filter(i -> i.length > 0 && !i[0].isEmpty())
-            .collect(Collectors.toList());
-        
-        return processedText.toArray(String[][]::new);
+        return Parser.readFile(path);
     }
 
     public static void runLine(String[] line, String[][] lines)
