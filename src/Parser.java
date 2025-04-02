@@ -3,31 +3,33 @@ import java.nio.file.Files;
 import java.util.Arrays;
 
 public class Parser {
-    public static void readFile(String[] args) throws Exception {
+
+    public static void main(String[] args) throws Exception {
         String[][] lines = readFile("src\\main.mocha");
         
-        System.out.println(Arrays.deepToString(lines));
+        // System.out.println(Arrays.deepToString(lines));
     }
 
     public static String[][] readFile(String path) throws IOException {
         String content = Files.readString(java.nio.file.Paths.get(path), java.nio.charset.StandardCharsets.UTF_8);
         content = replaceSpacesInStrings(content);
+        System.out.println(content);
         String[][] tokens = splitContentToTokens(content);
         tokens = fixSpacesInStrings(tokens);
-        
-        return tokens;
+        System.out.println(replaceSpacesInStrings("hello world\\n test!\"!!!\\n a\"a"));
+
+        return tokens;      
     }
 
     public static String replaceSpacesInStrings(String content) {
         java.util.regex.Pattern pattern = java.util.regex.Pattern.compile("(\".*?\")");
         java.util.regex.Matcher matcher = pattern.matcher(content);
-        StringBuffer sb = new StringBuffer();
+        StringBuffer output = new StringBuffer();
         while (matcher.find()) {
-            matcher.appendReplacement(sb, matcher.group(0).replace(" ", "\u0000"));
+            matcher.appendReplacement(output, matcher.group(0).replace(" ", "\u0000"));
         }
-        matcher.appendTail(sb);
-        
-        return sb.toString();
+        matcher.appendTail(output);
+        return output.toString();
     }
 
     public static String[][] splitContentToTokens(String content) {
